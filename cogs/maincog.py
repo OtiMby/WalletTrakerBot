@@ -49,7 +49,6 @@ class MainCog(commands.Cog):
                         last_transaction = last_transaction[0]
                         self.addresses[address]['last_shown_transaction'] = last_transaction['txHash']
                         transaction_type = find(last_transaction, "type", True)
-                        print(transaction_type)
 
                         if transaction_type in self.transaction_types:
 
@@ -58,7 +57,6 @@ class MainCog(commands.Cog):
 
                             date = datetime.utcfromtimestamp(transaction['blockTime']).strftime('%Y-%m-%d %H:%M:%S')
                             amount = round(find(transaction, "amount") * 10 ** -9, 3)
-                            print(transaction_type, amount)
 
                             token = r.get(
                                 f"https://public-api.solscan.io/account/{find(transaction, 'tokenAddress')}").json()
@@ -88,6 +86,7 @@ class MainCog(commands.Cog):
                 await asyncio.sleep(.2)
             await asyncio.sleep(1)
 
+    @commands.is_owner()
     @commands.command(name="add", description="add an address to track")
     async def add(self, ctx, address, name):
         if r.get(f"https://public-api.solscan.io/account/tokens?account={address}").status_code == 200 and address not in self.addresses.keys():
@@ -105,6 +104,7 @@ class MainCog(commands.Cog):
 
         return await ctx.channel.send(embed=embed)
 
+    @commands.is_owner()
     @commands.command(name="show", description="show all tracked addresses")
     async def show(self, ctx):
         embed = discord.Embed(title="Currently tracked wallet",
@@ -123,6 +123,7 @@ class MainCog(commands.Cog):
 
         return await ctx.channel.send(embed=embed)
 
+    @commands.is_owner()
     @commands.command(name="remove", description="delete an address to track")
     async def remove(self, ctx, address):
         del self.addresses[address]
@@ -133,6 +134,7 @@ class MainCog(commands.Cog):
 
         return await ctx.channel.send(embed=embed)
 
+    @commands.is_owner()
     @commands.command(name="reset", description="clear all tracked address")
     async def reset(self, ctx):
         self.addresses = {}
@@ -144,14 +146,6 @@ class MainCog(commands.Cog):
                               description="The bot will no longer track any wallet")
 
         return await ctx.channel.send(embed=embed)
-
-    @commands.command(name="test", description="clear all tracked address")
-    async def test(self, ctx):
-        pass
-
-    @commands.command(name='clear', help='this command will clear msgs')
-    async def clear(self, ctx):
-        await ctx.channel.purge(limit=1000)
 
 
 def setup(bot):
