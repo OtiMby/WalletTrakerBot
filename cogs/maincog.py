@@ -32,7 +32,8 @@ class MainCog(commands.Cog):
         self.bot = bot
         self.transaction_types = [["Unknown"] * 3, ["Unknown"] * 2, ['createAssociatedAccount', 'Unknown'],
                                   ['Unknown', 'createAssociatedAccount', 'spl-transfer'],
-                                  ["createAccount", "Unknown", "createAssociatedAccount", "Unknown", "Unknown"]]
+                                  ["createAccount", "Unknown", "createAssociatedAccount", "Unknown", "Unknown"],
+                                  ["createAccount", "Unknown", "createAssociatedAccount", "Unknown", "Unknown","Unknown"]]
         self.addresses = {}
 
     @commands.Cog.listener()
